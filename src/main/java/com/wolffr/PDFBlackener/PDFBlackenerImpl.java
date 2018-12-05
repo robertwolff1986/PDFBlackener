@@ -2,13 +2,13 @@ package com.wolffr.PDFBlackener;
 
 import java.util.List;
 
+import com.wolffr.PDFBlackener.config.PDFBlackenerConfig;
 import com.wolffr.PDFBlackener.exception.PDFBlackenerException;
 
 public class PDFBlackenerImpl implements PDFBlackener {
 
-	private static GlobalParameterUtil config;
-
 	public PDFBlackenerImpl() {
+		GlobalParameterUtil.initializeDefaultConfig();
 	}
 
 	public PDFBlackenerImpl(PDFBlackenerConfig config) {
@@ -18,11 +18,7 @@ public class PDFBlackenerImpl implements PDFBlackener {
 	@Override
 	public byte[] blackenPDF(byte[] pdf, List<Integer> pagesToKeep, boolean imagify) throws PDFBlackenerException {
 		byte[] blackenedPDF = BlackenPDFUtil.blackenPDF(pdf, pagesToKeep);
-
-		if (imagify) {
-			return ImagifyPDFUtil.imagifyPDF(blackenedPDF);
-		}
-		return blackenedPDF;
+		return imagify ? ImagifyPDFUtil.imagifyPDF(blackenedPDF) : blackenedPDF;
 	}
 
 	@Override

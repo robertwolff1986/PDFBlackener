@@ -1,6 +1,5 @@
 package com.wolffr.PDFBlackener;
 
-import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -45,7 +44,7 @@ class BlackenPDFUtil {
 
 	private static void blackenPDF(PDDocument loadedPdf, int pageNumber) throws PDFBlackenerException {
 		try (PDPageContentStream contentStream = new PDPageContentStream(loadedPdf, loadedPdf.getPage(pageNumber), AppendMode.APPEND, false)) {
-			contentStream.setNonStrokingColor(Color.BLACK);
+			contentStream.setNonStrokingColor(GlobalParameterUtil.getPDFBlackenerConfig().getBlackeningConfig().getColor());
 			contentStream.addRect(getBottomLeftX(loadedPdf,pageNumber), getBottomLeftY(loadedPdf,pageNumber), getWidth(loadedPdf,pageNumber), getHeight(loadedPdf,pageNumber));
 			contentStream.fill();
 		} catch (IOException ioe) {
@@ -70,7 +69,7 @@ class BlackenPDFUtil {
 	}
 
 	private static float getHeight(PDDocument loadedPdf, int pageNumber) {
-		return (loadedPdf.getPage(0).getBBox().getHeight() / 100f)
+		return (loadedPdf.getPage(pageNumber).getBBox().getHeight() / 100f)
 				* GlobalParameterUtil.getPDFBlackenerConfig().getBlackeningConfig().getBlackenHeightPercentage();
 	}
 }

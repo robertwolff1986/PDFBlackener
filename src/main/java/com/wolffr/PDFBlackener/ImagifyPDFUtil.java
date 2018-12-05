@@ -35,9 +35,9 @@ class ImagifyPDFUtil {
 		} catch (Exception e) {
 			LOGGER.error(String.format("Could not imagify pdf"), e.getMessage());
 			throw new PDFBlackenerException(String.format("Could not imagify pdf: %s", e.getMessage()));
-		} 
+		}
 	}
-	
+
 	private static byte[] getBytes(PDDocument newDocument) throws PDFBlackenerException {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			newDocument.save(baos);
@@ -50,13 +50,13 @@ class ImagifyPDFUtil {
 
 	private static PDPage createPageFromImage(PDDocument loadedPdf, PDDocument newDocument, byte[] pageImg) throws PDFBlackenerException {
 		try {
-		PDImageXObject pdImage = PDImageXObject.createFromByteArray(newDocument, pageImg, "");
-		PDPage page = new PDPage(new PDRectangle(new BoundingBox(0, 0, pdImage.getWidth(), pdImage.getHeight())));
-		try (PDPageContentStream contentStream = new PDPageContentStream(loadedPdf, page, AppendMode.APPEND, true, true)) {
-			contentStream.drawImage(pdImage, 0, 0, pdImage.getWidth(), pdImage.getHeight());
-		}
-		return page;
-		}catch(IOException ioe) {
+			PDImageXObject pdImage = PDImageXObject.createFromByteArray(newDocument, pageImg, "");
+			PDPage page = new PDPage(new PDRectangle(new BoundingBox(0, 0, pdImage.getWidth(), pdImage.getHeight())));
+			try (PDPageContentStream contentStream = new PDPageContentStream(loadedPdf, page, AppendMode.APPEND, true, true)) {
+				contentStream.drawImage(pdImage, 0, 0, pdImage.getWidth(), pdImage.getHeight());
+			}
+			return page;
+		} catch (IOException ioe) {
 			LOGGER.error(String.format("Could not create page from image"), ioe.getMessage());
 			throw new PDFBlackenerException(String.format("Could not create page from image: %s", ioe.getMessage()));
 		}
@@ -64,7 +64,9 @@ class ImagifyPDFUtil {
 
 	private static byte[] getPageAsImg(PDFRenderer renderer, int pageNumber) throws PDFBlackenerException {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			BufferedImage currentPageImage = renderer.renderImageWithDPI(pageNumber, 150f);
+			BufferedImage currentPageImage = GlobalParameterUtil.getPDFBlackenerConfig().getImagifyConfig() != null
+					? renderer.renderImageWithDPI(pageNumber, GlobalParameterUtil.getPDFBlackenerConfig().getImagifyConfig().getTargetDPI())
+					: renderer.renderImage(pageNumber);
 			ImageIO.write(currentPageImage, "jpg", baos);
 			return baos.toByteArray();
 		} catch (IOException ioe) {

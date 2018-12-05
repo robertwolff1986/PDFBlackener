@@ -23,7 +23,7 @@ class PageSelector {
 				s.setStartPage(pageNumber);
 				s.setEndPage(pageNumber);
 				String pageText = s.getText(loadedPdf);
-				if (stringsOnPagesThatShouldBeKepped.stream().anyMatch(searchString -> pageText.contains(pageText)))
+				if (stringsOnPagesThatShouldBeKepped.stream().anyMatch(searchString -> pageText.contains(searchString)))
 					pages.add(pageNumber - 1);
 			}
 		} catch (InvalidPasswordException e) {
