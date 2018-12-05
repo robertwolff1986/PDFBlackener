@@ -1,6 +1,6 @@
 # PDFBlackener
 
-PDFBlackener is a simple library to blacken/redact pdfs.
+PDFBlackener is a simple library to blacken/redact pdfs. AS Pdfs are incredibly tricky constructs and you can use multiple techniques to retrieve data from a blackened pdf, PDFBlackener may additionally convert all pdf pages to images. The resulting pdf will only contain images and no more information retrieval is possible.
 
 Sample input:
 
