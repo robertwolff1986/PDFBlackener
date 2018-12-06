@@ -2,6 +2,7 @@ package com.wolffr.PDFBlackener;
 
 import java.util.List;
 
+import com.wolffr.PDFBlackener.config.DetailBlackeningConfig;
 import com.wolffr.PDFBlackener.exception.PDFBlackenerException;
 
 /**
@@ -29,4 +30,7 @@ public interface PDFBlackener {
 	 * @throws PDFBlackenerException
 	 */
 	public byte[] findPagesAndBlackenPDF(byte[] pdf, List<String> stringsOnPagesThatShouldBeKepped, boolean imagify) throws PDFBlackenerException;
+	
+	
+	public byte[] detailBlackening(byte[] pdf, List<DetailBlackeningConfig> detailBlackeningConfigList,boolean imagify) throws PDFBlackenerException;
 }

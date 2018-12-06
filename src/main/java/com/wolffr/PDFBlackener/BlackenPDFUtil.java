@@ -31,7 +31,7 @@ class BlackenPDFUtil {
 			throw new PDFBlackenerException(String.format("Could not read pdf: %s", ioe.getMessage()));
 		}
 	}
-
+	
 	private static byte[] getBytes(PDDocument loadedPdf) throws PDFBlackenerException {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			loadedPdf.save(baos);
@@ -45,7 +45,9 @@ class BlackenPDFUtil {
 	private static void blackenPDF(PDDocument loadedPdf, int pageNumber) throws PDFBlackenerException {
 		try (PDPageContentStream contentStream = new PDPageContentStream(loadedPdf, loadedPdf.getPage(pageNumber), AppendMode.APPEND, false)) {
 			contentStream.setNonStrokingColor(GlobalParameterUtil.getPDFBlackenerConfig().getBlackeningConfig().getColor());
-			contentStream.addRect(getBottomLeftX(loadedPdf,pageNumber), getBottomLeftY(loadedPdf,pageNumber), getWidth(loadedPdf,pageNumber), getHeight(loadedPdf,pageNumber));
+			contentStream.addRect(getBottomLeftX(loadedPdf,pageNumber), getBottomLeftY(loadedPdf,pageNumber), 
+					getWidth(loadedPdf, pageNumber), 
+					getHeight(loadedPdf, pageNumber));
 			contentStream.fill();
 		} catch (IOException ioe) {
 			LOGGER.error(String.format("Could not blacken page %s", pageNumber), ioe.getMessage());
