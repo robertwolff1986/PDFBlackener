@@ -18,13 +18,13 @@ class PageSelector {
 	protected static List<Integer> findPagesThatContains(byte[] pdf, List<String> stringsOnPagesThatShouldBeKepped) throws PDFBlackenerException {
 		List<Integer> pages = new ArrayList<>();
 		try (PDDocument loadedPdf = PDDocument.load(pdf)) {
-			for (int pageNumber = 0; pageNumber < loadedPdf.getNumberOfPages(); pageNumber++) {
+			for (int pageNumber = 1; pageNumber < loadedPdf.getNumberOfPages(); pageNumber++) {
 				PDFTextStripper s = new PDFTextStripper();
 				s.setStartPage(pageNumber);
 				s.setEndPage(pageNumber);
 				String pageText = s.getText(loadedPdf);
 				if (stringsOnPagesThatShouldBeKepped.stream().anyMatch(searchString -> pageText.contains(searchString)))
-					pages.add(pageNumber - 1);
+					pages.add(pageNumber);
 			}
 		} catch (InvalidPasswordException e) {
 			LOGGER.error(String.format("Password protected pdf could not be opened, not yet implemented"), e.getMessage());

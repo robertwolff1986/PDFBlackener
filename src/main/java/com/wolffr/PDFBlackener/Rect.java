@@ -1,13 +1,13 @@
 package com.wolffr.PDFBlackener;
 
-public class BlackenRect {
+public class Rect {
 
 	private float x;
 	private float y;
 	private float width;
 	private float height;
 
-	public BlackenRect(float x, float y, float width, float height) {
+	public Rect(float x, float y, float width, float height) {
 		super();
 		this.x = x;
 		this.y = y;
